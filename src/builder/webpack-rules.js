@@ -40,12 +40,20 @@ module.exports = function () {
     });
 
 
+    let sassExtractPlugin = new ExtractTextPlugin('css/build.css');
+
     // Recognize .scss Imports.
     rules.push({
         test: /\.s[ac]ss$/,
         exclude: Config.preprocessors.sass ? Config.preprocessors.sass.map(sass => sass.src.path()) : [],
-        loaders: ['style-loader', 'css-loader', 'sass-loader']
+        //loaders: ['style-loader', 'css-loader', 'sass-loader']
+        use: sassExtractPlugin.extract({
+            use: "css-loader!sass-loader",
+            fallback: "style-loader"
+        })
     });
+
+    extractPlugins.push(sassExtractPlugin);
 
 
     // Recognize .less Imports.
